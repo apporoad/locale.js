@@ -4,7 +4,7 @@ lightWeight packages for localing your project in so easy way, internationalize 
 
 ## just try it
 ```bash
-npm i --save locale.js
+npm i --save locale.node
 ```
 
 ```js
