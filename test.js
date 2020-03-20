@@ -1,14 +1,6 @@
-# locale.js
-lightWeight packages for localing your project in so easy way, internationalize your project
-轻量级node国际化组件
+const T = require('./')
 
-## just try it
-```bash
-npm i --save locale.js
-```
 
-```js
-const T = require('locale.js')
 
 console.log(T('str1'))
 console.log('str2'.l())
@@ -20,7 +12,10 @@ console.log('str6'.toLocale())
 T.set(["str1","here is str1"])
 T.set(["str2","here is str2"])
 T.set([["str2","here is str2 oh"] , ["str3","here is str3 oh"], ["str4","here is str4 oh"]])
-T.set({str4: 'here is str4 json',str5: 'here is str5 json'})
+T.set({
+    str4: 'here is str4 json',
+    str5: 'here is str5 json'
+})
 T.set(["str1","字符串1"],'cn')
 T.set(["str2","字符串2"],'cn')
 T.set([["str2","字符串2 oh"] , ["str3","字符串3 oh"], ["str4","字符串4 oh"]],'cn')
@@ -46,6 +41,7 @@ console.log(T.get('str4'))
 console.log('str5'.toLocale())
 console.log('str6'.toLocale())
 
+
 T.setLanguage()
 
 console.log('xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx')
@@ -55,6 +51,3 @@ console.log('str3'.locale())
 console.log(T.get('str4'))
 console.log('str5'.toLocale())
 console.log('str6'.toLocale())
-
-
-```
