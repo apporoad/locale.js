@@ -8,7 +8,7 @@ npm i --save locale.js
 ```
 
 ```js
-const T = require('locale.js')
+const T = require('locale.node')
 
 console.log(T('str1'))
 console.log('str2'.l())

@@ -1,5 +1,5 @@
 {
-  "name": "locale.js",
+  "name": "locale.node",
   "version": "1.0.0",
   "description": "locale internationalize",
   "main": "index.js",
