@@ -39,7 +39,6 @@ function get(str,lang){
 function set(arrayOrJson,lang){
     if(!arrayOrJson) return
     lang = getCurrentLang(lang)
-    var array = []
     if(arrayOrJson.constructor === Array&& arrayOrJson.length>0){
         if(arrayOrJson[0].constructor !=Array){
             setOne(arrayOrJson,lang)
@@ -58,7 +57,8 @@ function set(arrayOrJson,lang){
 }
 
 function setOne(arry ,lang){
-    if(arry && arry.length && arry.length==2 && typeof(arry[0]) =='string' && typeof(arry[1]) =='string'){
+    //typeof(arry[1]) =='string'
+    if(arry && arry.length && arry.length==2 && typeof(arry[0]) =='string' ){
         if(!cache[lang]){
             cache[lang] = new Map()
         }
@@ -90,6 +90,10 @@ Locale.get =(str,lang) =>{
 }
 Locale.set =  (arrayOrJson,lang) =>{
     set(arrayOrJson,lang)
+}
+
+Locale.match = (pattern, raw) =>{
+    //todo
 }
 
 module.exports = Locale

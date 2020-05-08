@@ -51,3 +51,13 @@ console.log('str3'.locale())
 console.log(T.get('str4'))
 console.log('str5'.toLocale())
 console.log('str6'.toLocale())
+
+
+T.set({
+    fn : hello=>{ console.log(`${hello} world`)
+        return '..'
+    }
+})
+
+
+console.log('fn'.l()('hi'))
