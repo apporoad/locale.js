@@ -3,6 +3,7 @@ const uType = utils.Type
 var language = null
 const cache = {}
 const matchers = {}
+const matcherCache = {}
 
 var getCurrentLang = (lang) => {
     return (lang || language || process.env.LOCAL_LANG || process.env.LANG || 'default').toLowerCase()
@@ -45,6 +46,75 @@ function getHashCode(str, caseSensitive) {
     return (hash & 0x7FFFFFFF);
 }
 
+function drawInfosFromStr(str){
+    // '<action>aa[param1][param2]a{tag1}{tag2}'
+    // '<<action>>aa[[param1]][[param2]]a{{tag1}}{{tag2}}'
+    var info = { raw : str}
+    var actions = info.match(/(?<=<<)((?!<<)[\S\s])*(?=>>)/g)
+    if(!actions){
+        actions = info.match(/(?<=<)((?!<)[\S\s])*(?=>)/g)
+    }
+    info.action = actions && actions.length>0 ? actions[0] : null
+    var params = info.match(/(?<=\[\[)((?!\[\[)[\S\s])*(?=\]\])/g)
+    if(!params){
+        params = info.match(/(?<=\[)((?!\[)[\S\s])*(?=\])/g)
+    }
+    info.params = params
+    var tags = info.match(/(?<=\{\{)((?!\{\{)[\S\s])*(?=\}\})/g)
+    if(!tags){
+        tags = info.match(/(?<=\{)((?!\{)[\S\s])*(?=\})/g)
+    }
+    info.tags = tags
+}
+
+function innerMatchs (str, match){
+    // tag 优先 
+    //todo 
+}
+
+function innerGetRealValue(str , matchValue){
+    if(uType.isString(matchValue)){
+        return matchValue
+    }
+    else if(uType.isFunction(matchValue) || uType.isAsyncFunction(matchValue)){
+        //todo
+        return matchValue(str)
+    }
+}
+
+function getFormMatchers(str,lang){
+    lang = getCurrentLang(lang)
+    /*
+    {
+        action : '提示',
+        actions 
+        params : [ ,]
+        param
+        raw : '',
+        tags :[]
+        tag	
+    }
+*/
+    if(matcherCache[lang] && matcherCache[lang][str]){
+        return matcherCache[lang][str]
+    }
+    if(matchers && matchers[lang] && matchers[lang].length>0){
+        /*{
+                match: arrayOrJson,
+                value: langOrValue
+            }*/
+        for(var i=0;i<matchers[lang].length;i++){
+            var m = matchers[lang][i]
+            if(innerMatchs(str,m.match)){
+                return innerGetRealValue(str,m.value)
+            }
+        }
+    }  
+    matcherCache[lang] = matcherCache[lang] || {}
+    matcherCache[lang][str] = str
+    return str
+}
+
 function get(str, lang) {
     lang = getCurrentLang(lang)
     if (!cache[lang]) return str
@@ -54,7 +124,7 @@ function get(str, lang) {
         var arry = map.get(hash)
         for (var i = 0; i < arry.length; i++) {
             if (arry[i][0] == str) {
-                return arry[i][1]
+                return innerGetRealValue(str,arry[i][1])
             }
         }
     }
@@ -79,7 +149,7 @@ function set(arrayOrJson, langOrValue, lang) {
         if(isMatchObject(arrayOrJson) ||uType.isRegExp(arrayOrJson) || uType.isFunction(arrayOrJson) || uType.isAsyncFunction(arrayOrJson)){
             ilang = getCurrentLang(lang)
             matchers[ilang] = matchers[ilang] || []
-            matchers.push({
+            matchers[ilang].push({
                 match: arrayOrJson,
                 value: langOrValue
             })
@@ -122,8 +192,9 @@ function setOne(arry, lang) {
 
 var innerGet = (str,lang)=>{
     var  r  = get(str,lang)
-    //todo 
-
+    if(!r){
+        
+    }
     return r || str
 }
 function Locale(str, lang) {
@@ -143,6 +214,9 @@ Locale.set = (arrayOrJson, langOrValue, lang) => {
 
 Locale.match = (pattern, raw) => {
     //todo
+}
+Locale.draw = (str) =>{
+    return drawInfosFromStr(str)
 }
 
 module.exports = Locale

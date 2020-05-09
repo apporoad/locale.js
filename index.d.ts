@@ -36,10 +36,11 @@ declare const Localejs: {
 	/**
 	 * add locale map to cache 
 	 * 添加国际化支持
-	 * @param arrayOrJson 数组或者json
-	 * @param lang  语言
+	 * @param stringOrarrayOrJson 支持字符串，数组，或者json
+	 * @param langOrValue 语言，当stringOrarrayOrJson 为字符串时，这里表示值
+	 * @param lang 当stringOrarrayOrJson 为字符串时，这里表示语言
 	 */
-	set(arrayOrJson , lang?: string);
+	set(stringOrarrayOrJson, langOrValue, lang? : String);
 
 	/**
 	 * set global lang
