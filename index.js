@@ -193,7 +193,7 @@ function setOne(arry, lang) {
 var innerGet = (str,lang)=>{
     var  r  = get(str,lang)
     if(!r){
-        
+        //todo
     }
     return r || str
 }
